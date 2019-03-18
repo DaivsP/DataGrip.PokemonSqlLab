@@ -35,10 +35,19 @@ on p.primary_type = t.id
 order by t.id
 
 #How many pokemon at level 100 does each trainer with at least one level 100 pokemon have?
-select p.name, pt.pokelevel
+select p.name, pt.pokelevel, t.trainerID
 from pokemon.pokemons p
 join pokemon.pokemon_trainer pt
 on pt.pokemon_id = p.id
 join pokemon.trainers t
 on t.trainerID = pt.trainerID
 where pt.pokelevel = 100;
+
+select pt.trainerID, count(*)
+from pokemon_trainer pt
+where pt.pokelevel = '100'
+group by pt.trainerID;
+
+#How many pokemon only belong to one trainer and no other?
+select count(*)
+from (select count(pt.pokemon_id) from pokemon_trainer pt group by pokemon_id having count(*) = 1) a;
